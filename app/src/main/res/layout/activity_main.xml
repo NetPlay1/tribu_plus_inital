@@ -56,7 +56,7 @@
         app:layout_constraintBottom_toTopOf="@+id/NameInput"
         app:layout_constraintEnd_toEndOf="@+id/NameInput"
         app:layout_constraintStart_toStartOf="@+id/NameInput"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView4"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
@@ -114,8 +114,9 @@
         android:text="Sign Up "
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+        app:layout_constraintBottom_toBottomOf="@+id/display"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.100000024" />
 </androidx.constraintlayout.widget.ConstraintLayout>
