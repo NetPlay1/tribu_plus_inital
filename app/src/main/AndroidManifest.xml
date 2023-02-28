@@ -12,10 +12,16 @@
         android:theme="@style/Theme.Tribu_inital"
         tools:targetApi="31">
         <activity
+            android:name=".Login_page"
+            android:exported="false" />
+        <activity
+            android:name=".Main_page"
+            android:exported="false" />
+        <activity
             android:name=".Sign_up_page"
             android:exported="false" />
         <activity
-            android:name=".Login_page"
+            android:name=".Start_page"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

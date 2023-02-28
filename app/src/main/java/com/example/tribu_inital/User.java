@@ -5,10 +5,14 @@ public class User {
     private String email;
     private String password;
 
+    private String photo;
+
     public User(String name,String email, String password){
         this.name =name;
         this.email=email;
         this.password=password;
+
+        photo = "/mipmap-hdpi/user.png";
     }
 
     public String getName() {
@@ -33,5 +37,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhoto() {
+         return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

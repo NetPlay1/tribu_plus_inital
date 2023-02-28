@@ -53,7 +53,7 @@ public class Login_page extends AppCompatActivity implements View.OnClickListene
         password=passwordInput.getText().toString();
         progressBar.setVisibility(View.VISIBLE);
         try {
-            if(email == null){
+            if(email.matches("")){
 
                 progressBar.setVisibility(View.GONE);
                 emailInput.setError("you didn't fill your email!");
@@ -61,7 +61,7 @@ public class Login_page extends AppCompatActivity implements View.OnClickListene
                 throw new Exception("you didn't fill your email!");
             }
 
-            if(password == null) {
+            if(password.matches("")) {
 
                 progressBar.setVisibility(View.GONE);
                 passwordInput.setError("you didn't fill you password!");
@@ -69,7 +69,7 @@ public class Login_page extends AppCompatActivity implements View.OnClickListene
                 throw new Exception("you didn't fill you password!");
             }
 
-            final FirebaseAuth Auth =FirebaseAuth.getInstance();
+            final FirebaseAuth Auth = FirebaseAuth.getInstance();
 
             Auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
                 if(task.isSuccessful()){

@@ -1,11 +1,16 @@
 package com.example.tribu_inital;
 
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Patterns;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -35,6 +40,9 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     ProgressBar progressBar;
 
+    Dialog dialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +52,7 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
         pass=findViewById(R.id.passwordText);
         submit=findViewById(R.id.submitButton);
         layout=findViewById(R.id.display);
+
 
 
         // creating the progress bar
@@ -56,6 +65,9 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
         //write a message to data base
         firebaseAuth = FirebaseAuth.getInstance();
+
+        //dialog stuff
+        dialog = new Dialog(Sign_up_page.this);
 
        submit.setOnClickListener(this);
     }
@@ -80,6 +92,9 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
                             Toast toast=Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT);
                             toast.show();
+
+
+
 
                         }
 
@@ -120,6 +135,15 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        createUser();
+        //TODO: you need the line below !!!
+        //createUser();
+
+
+        dialog.setContentView(R.layout.user_photo_picker_dialog);
+        Window window = dialog.getWindow();
+        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        window.setGravity(Gravity.CENTER);
+        dialog.setCancelable(false);
+        dialog.show();
     }
 }
