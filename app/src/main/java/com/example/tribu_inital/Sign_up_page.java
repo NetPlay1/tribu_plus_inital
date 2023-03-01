@@ -5,9 +5,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -40,7 +44,7 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     ProgressBar progressBar;
 
-    Dialog dialog;
+    User_photo_dialog dialog;
 
 
     @Override
@@ -67,7 +71,8 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
         firebaseAuth = FirebaseAuth.getInstance();
 
         //dialog stuff
-        dialog = new Dialog(Sign_up_page.this);
+
+
 
        submit.setOnClickListener(this);
     }
@@ -93,8 +98,9 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
                             Toast toast=Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT);
                             toast.show();
 
-
-
+                            dialog =new User_photo_dialog(Sign_up_page.this);
+                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                            dialog.show();
 
                         }
 
@@ -135,15 +141,7 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        //TODO: you need the line below !!!
-        //createUser();
+        createUser();
 
-
-        dialog.setContentView(R.layout.user_photo_picker_dialog);
-        Window window = dialog.getWindow();
-        window.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        window.setGravity(Gravity.CENTER);
-        dialog.setCancelable(false);
-        dialog.show();
-    }
+ }
 }
