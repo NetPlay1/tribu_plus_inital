@@ -2,6 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,8 +24,14 @@
         android:theme="@style/Theme.Tribu_inital"
         tools:targetApi="31">
         <activity
-            android:name=".Login_page"
+            android:name=".User_photo_dialog_v2"
+            android:theme="@android:style/Theme.Dialog"
             android:exported="false" />
+        <activity
+            android:name=".Login_page"
+            android:exported="false" /> <!-- <activity android:name=".User_photo_dialog" -->
+        <!-- android:theme="@style/Theme.AppCompat.Dialog" -->
+        <!-- /> -->
         <activity
             android:name=".Main_page"
             android:exported="false" />

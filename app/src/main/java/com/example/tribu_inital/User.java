@@ -7,12 +7,11 @@ public class User {
 
     private String photo;
 
-    public User(String name,String email, String password){
+    public User(String name, String email, String password, String photo){
         this.name =name;
         this.email=email;
         this.password=password;
-
-        photo = "/mipmap-hdpi/user.png";
+        this.photo=photo;
     }
 
     public String getName() {

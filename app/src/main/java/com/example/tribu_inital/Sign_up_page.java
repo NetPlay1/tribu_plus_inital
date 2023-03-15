@@ -1,20 +1,14 @@
 package com.example.tribu_inital;
 
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.content.AsyncTaskLoader;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -25,7 +19,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class Sign_up_page extends AppCompatActivity implements View.OnClickListener {
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Sign_up_page extends AppCompatActivity implements View.OnClickListener{
+
 
     EditText name,pass,email;
 
@@ -44,13 +42,17 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     ProgressBar progressBar;
 
-    User_photo_dialog dialog;
+    //User_photo_dialog dialog;
+
+    String photo;
+
+    Intent intent;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.sign_up_page);
         name=findViewById(R.id.NameInput);
         email=findViewById(R.id.emailInput);
         pass=findViewById(R.id.passwordText);
@@ -87,20 +89,29 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
                     email.getText().toString(),
                     pass.getText().toString())
                     .addOnCompleteListener(this, task -> {
+
+                            getPhotoFromDialog();
+
+
+                        //creating a normal user with default photo
                         User user= new User(
                                 name.getText().toString(),
                                 email.getText().toString(),
-                            pass.getText().toString());
+                                pass.getText().toString(),
+                                photo);
                         if (task.isSuccessful()){
+
                             ref.push().setValue(user);
                             progressBar.setVisibility(View.GONE);
 
                             Toast toast=Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT);
                             toast.show();
 
-                            dialog =new User_photo_dialog(Sign_up_page.this);
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            dialog.show();
+//                            intent =new Intent(Sign_up_page.this,User_photo_dialog.class);
+//                            startActivity(intent);
+
+
+
 
                         }
 
@@ -113,6 +124,11 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public void getPhotoFromDialog() {
+        User_photo_dialog_v2 dialogV2 =new User_photo_dialog_v2(Sign_up_page.this);
+        dialogV2.show();
+
+    }
 
 
     public boolean isValidate(){
@@ -141,7 +157,24 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        //TODO: create user is imprortent
         createUser();
 
+//        User_photo_dialog_fragment dialogFragment = new User_photo_dialog_fragment();
+//        dialogFragment.show(getSupportFragmentManager(), "MyFragment");
+
+
+//        intent =new Intent(Sign_up_page.this,User_photo_dialog.class);
+//        startActivity(intent);
+
  }
+
+
+
+
+
+
+
+
+
 }
