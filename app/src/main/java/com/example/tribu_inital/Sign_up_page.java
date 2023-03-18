@@ -1,29 +1,33 @@
 package com.example.tribu_inital;
 
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.content.ContentResolver;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class Sign_up_page extends AppCompatActivity implements View.OnClickListener {
 
@@ -36,7 +40,10 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
     FirebaseDatabase database=FirebaseDatabase.getInstance();
 
     //pointing to the Users table
-    DatabaseReference ref=database.getReference("Users");
+    DatabaseReference ref;
+
+    //storage pointer
+    StorageReference mStorageRef;
 
     Button submit;
 
@@ -44,7 +51,11 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     ProgressBar progressBar;
 
-    User_photo_dialog dialog;
+    Intent intent;
+    Uri uri;
+
+    String picName;
+
 
 
     @Override
@@ -70,11 +81,19 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
         //write a message to data base
         firebaseAuth = FirebaseAuth.getInstance();
 
-        //dialog stuff
-
 
 
        submit.setOnClickListener(this);
+
+
+//       ActivityResultLauncher<String> mStartDialog = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+//               new ActivityResultCallback<ActivityResult>() {
+//                   @Override
+//                   public void onActivityResult(ActivityResult result) {
+//
+//                   }
+//               }
+//       );
     }
 
     public void createUser(){
@@ -83,37 +102,65 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
         //handler.postDelayed(() -> progressBar.setVisibility(View.GONE),3000);
 
         if(isValidate()){
-            firebaseAuth.createUserWithEmailAndPassword(
-                    email.getText().toString(),
-                    pass.getText().toString())
-                    .addOnCompleteListener(this, task -> {
-                        User user= new User(
-                                name.getText().toString(),
-                                email.getText().toString(),
-                            pass.getText().toString());
-                        if (task.isSuccessful()){
-                            ref.push().setValue(user);
-                            progressBar.setVisibility(View.GONE);
+            //default user photo
+            uri = Uri.parse("android.resource://com.example.tribu_inital/"+R.mipmap.user);
 
-                            Toast toast=Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT);
-                            toast.show();
+            intent = new Intent(Sign_up_page.this, User_photo_dialog.class);
+            startActivityForResult(intent,1);
 
-                            dialog =new User_photo_dialog(Sign_up_page.this);
-                            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                            dialog.show();
-
-                        }
-
-                    }).addOnFailureListener(e -> {
-                        progressBar.setVisibility(View.GONE);
-                        Toast toast=Toast.makeText(getApplicationContext(),""+e.getMessage(),Toast.LENGTH_SHORT);
-                        toast.show();
-                    });
         }
 
     }
 
+    private void continueCreatingUser() {
+        firebaseAuth.createUserWithEmailAndPassword(
+                        email.getText().toString(),
+                        pass.getText().toString())
+                .addOnCompleteListener(this, task -> {
 
+                    //calling user photo dialog
+
+                    User user= new User(
+                            name.getText().toString(),
+                            email.getText().toString(),
+                            pass.getText().toString(),
+                            picName
+                    );
+
+                    if (task.isSuccessful()){
+                        ref = database.getReference("Users").push();
+                        //creating the group / pointing to it
+
+                        //setting the user-key/path and adding the user as the value
+                        ref.child(user.getKey()).setValue(user);
+                        progressBar.setVisibility(View.GONE);
+
+                        mStorageRef= FirebaseStorage.getInstance().getReference("Images/Users/"+user.getKey());
+                        mStorageRef = mStorageRef.child(picName);
+                        mStorageRef.putFile(uri).addOnSuccessListener(taskSnapshot ->
+                                        Toast.makeText(this,"user photo uploaded Successfully!",Toast.LENGTH_SHORT).show())
+                                .addOnFailureListener(e -> Toast.makeText(this,""+e,Toast.LENGTH_LONG).show());
+
+                        Toast toast=Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT);
+                        toast.show();
+
+
+                    }
+
+                }).addOnFailureListener(e -> {
+                    progressBar.setVisibility(View.GONE);
+                    Toast toast=Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_SHORT);
+                    toast.show();
+                });
+
+    }
+
+
+    /*
+    *
+    * Basic validation for the user
+    *
+    * */
 
     public boolean isValidate(){
         if(name.getText().toString().length() < 3){
@@ -141,7 +188,28 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        createUser();
+      createUser();
 
+//    intent = new Intent(Sign_up_page.this, User_photo_dialog.class);
+//    startActivityForResult(intent,1);
  }
+
+ //     getting result from user photo dialog
+
+
+    /*
+        getting file extension of the user image
+
+        not my code!
+     */
+
+    //Todo StartActivityForResult was here fix it!!!
+
+//    private String getFileExtension(Uri uri){
+//        ContentResolver contentResolver = getContentResolver();
+//        MimeTypeMap mime = MimeTypeMap.getSingleton();
+//        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
+//    }
+
+
 }
