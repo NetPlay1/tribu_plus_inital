@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,9 +14,6 @@
         <activity
             android:name=".Login_page"
             android:exported="false" />
-        <activity
-            android:name=".User_photo_dialog"
-            android:theme="@style/transperntDialog"/>
         <activity
             android:name=".Main_page"
             android:exported="false" />
