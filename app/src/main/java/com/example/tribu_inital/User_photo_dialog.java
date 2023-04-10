@@ -1,8 +1,10 @@
 package com.example.tribu_inital;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.provider.SyncStateContract;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -31,7 +34,7 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
 
     Button cameraButton, galleryButton, skipButton;
 
-    ActivityResultLauncher mTakePhoto;
+    ActivityResultLauncher<Intent> mTakePhoto;
 
     ActivityResultLauncher<Intent> mPhotoFromGallery;
 
@@ -57,14 +60,32 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
         skipButton.setOnClickListener(this);
 
 
-        mTakePhoto = registerForActivityResult(
-                new ActivityResultContracts.TakePicture(),
-                result -> {
-                    if(!result) finish();
-                    intent = new Intent();
-                    intent.setData(uri);
-                    finish();
 
+        mTakePhoto = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    try {
+                        Intent data = result.getData();
+
+                        // checking for no nulls / that the task was completed successfully
+                        if(result.getResultCode() != -1 || data == null) throw new Exception("Camera Intent wasn't successful");
+
+                        Bundle extras = data.getExtras();
+                        Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+                        intent = new Intent();
+
+                        intent.putExtra("image", imageBitmap);
+                        intent.putExtra("photo","photo");
+                        setResult(RESULT_OK,intent);
+                        finish();
+                    }
+
+                    catch (Exception e){
+                        Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
+                        setResult(RESULT_CANCELED,intent);
+                        finish();
+                    }
 
 
                 }
@@ -74,22 +95,33 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
         mPhotoFromGallery = registerForActivityResult(
           new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if(result.getResultCode() != -1) return;
-                    intent = new Intent();
+                try {
                     Intent data = result.getData();
-                    assert data != null;
+
+                    // checking for no nulls / that the task was completed successfully
+                    if(result.getResultCode() != -1 || data == null) throw new Exception("Gallery Intent wasn't successful");
+
+
+                    /*
+                         if everything was successful
+                         creating new intent setting the data the gallery intent data
+                         and setting the result of this Activity result as successful
+                     */
+                    intent = new Intent();
                     intent.setData(data.getData());
                     getBaseContext().getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     setResult(RESULT_OK,intent);
                     finish();
-                    }
+                }
+                catch (Exception e) {
+                    Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_LONG).show();
+                    setResult(RESULT_CANCELED,intent);
+                    finish();
+                }
+          }
         );
 
-//
-//        if (ActivityCompat.checkSelfPermission(User_photo_dialog.this,
-//                Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED)
-//            finish();
-
+        Permissions.requestPermission(this);
     }
     @Override
     public void onClick(View view) {
@@ -100,17 +132,27 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
             intent.setType("image/*");
             intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             mPhotoFromGallery.launch(intent);
-            //mPhotoFromGallery.launch("image/*");
         }
 
         if(view == cameraButton){
+            try {
+                if(!Permissions.hasCameraPermission(getApplicationContext())) throw new Exception("No camera permission");
 
-          mTakePhoto.launch(uri);
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                mTakePhoto.launch(intent);
+            }
 
+            catch (Exception e){
+                Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
+                setResult(RESULT_CANCELED);
+                finish();
+            }
         }
 
 
     }
+
+
 
 
 
