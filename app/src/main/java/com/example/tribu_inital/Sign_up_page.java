@@ -31,6 +31,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+
 public class Sign_up_page extends AppCompatActivity implements View.OnClickListener {
 
     EditText name,pass,email;
@@ -39,7 +41,7 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
     FirebaseAuth firebaseAuth;
 
     //data base connection
-    FirebaseDatabase database=FirebaseDatabase.getInstance();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     //pointing to the Users table
     DatabaseReference ref;
@@ -55,6 +57,8 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     Intent intent;
     Uri uri;
+
+    byte[] bytes;
 
     String picName;
 
@@ -93,12 +97,31 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
         mStartDialog = registerForActivityResult(
                new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    if(result.getResultCode() !=-1) return;
                     Intent data = result.getData();
-                    assert data != null;
-                    uri = data.getData();
-                    picName = System.currentTimeMillis()+".image";
-                    continueCreatingUser();
+
+                    // checking for no nulls / that the task was completed successfully
+                    if(result.getResultCode() !=-1 || data == null){
+                        //using the default
+                        picName = System.currentTimeMillis() + ".jpg";
+                        uri = Uri.parse("android.resource://com.example.tribu_inital/"+R.mipmap.user);
+                        continueCreatingUser("gallery");
+                        return;
+                    }
+
+                    if(data.getStringExtra("photo") == null) {
+                        uri = data.getData();
+                        picName = System.currentTimeMillis() + ".jpg";
+                        continueCreatingUser("gallery");
+                        return;
+                    }
+
+                    Bitmap bitmap = (Bitmap) data.getExtras().get("image");
+                    picName = System.currentTimeMillis() + ".jpg";
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG,100, baos);
+                    bytes = baos.toByteArray();
+                    continueCreatingUser("camera");
 
                 }
        );
@@ -107,24 +130,18 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
     public void createUser(){
         progressBar.setVisibility(View.VISIBLE);
 
-        //handler.postDelayed(() -> progressBar.setVisibility(View.GONE),3000);
-
         if(isValidate()){
             //default user photo
             uri = Uri.parse("android.resource://com.example.tribu_inital/"+R.mipmap.user);
 
-            requestPermissions(new String[] {Manifest.permission.CAMERA},1);
-
-
             intent = new Intent(Sign_up_page.this, User_photo_dialog.class);
             mStartDialog.launch(intent);
-            //startActivityForResult(intent,1);
 
         }
 
     }
 
-    private void continueCreatingUser() {
+    private void continueCreatingUser(String camera_or_gallery) {
         firebaseAuth.createUserWithEmailAndPassword(
                         email.getText().toString(),
                         pass.getText().toString())
@@ -146,23 +163,25 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
                         //setting the user-key/path and adding the user as the value
                         ref.child(user.getKey()).setValue(user);
                         progressBar.setVisibility(View.GONE);
-
-                        mStorageRef = FirebaseStorage.getInstance().getReference("Images/Users/"+ user.getEmail().replace('.',' '));
+                        mStorageRef = FirebaseStorage.getInstance().getReference("Images/Users/"+ user.getKey());
                         mStorageRef = mStorageRef.child(picName);
-                        mStorageRef.putFile(uri).addOnSuccessListener(taskSnapshot ->
-                                        Toast.makeText(this,"user photo uploaded Successfully!",Toast.LENGTH_SHORT).show())
-                                        .addOnFailureListener(e -> Toast.makeText(this,""+e,Toast.LENGTH_LONG).show());
-
-                        Toast toast=Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT);
-                        toast.show();
-
-
+                        if(camera_or_gallery.equals("gallery")) {
+                            mStorageRef.putFile(uri).addOnSuccessListener(taskSnapshot ->
+                                            Toast.makeText(this, "user photo uploaded Successfully!", Toast.LENGTH_SHORT).show())
+                                            .addOnFailureListener(e -> Toast.makeText(this, "" + e, Toast.LENGTH_LONG).show());
+                                            Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {
+                            UploadTask uploadTask = mStorageRef.putBytes(bytes);
+                            Toast.makeText(this, "user photo uploaded Successfully!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                 }).addOnFailureListener(e -> {
                     progressBar.setVisibility(View.GONE);
-                    Toast toast=Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_SHORT);
-                    toast.show();
+                    Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
                 });
 
     }
@@ -201,27 +220,6 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
       createUser();
-
-//    intent = new Intent(Sign_up_page.this, User_photo_dialog.class);
-//    startActivityForResult(intent,1);
- }
-
- //     getting result from user photo dialog
-
-
-    /*
-        getting file extension of the user image
-
-        not my code!
-     */
-
-    //Todo StartActivityForResult was here fix it!!!
-
-//    private String getFileExtension(Uri uri){
-//        ContentResolver contentResolver = getContentResolver();
-//        MimeTypeMap mime = MimeTypeMap.getSingleton();
-//        return mime.getExtensionFromMimeType(contentResolver.getType(uri));
-//    }
-
+    }
 
 }
