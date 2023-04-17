@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="transperntDialog"
-        parent="Theme.AppCompat.Dialog">
+        parent="Theme.Material3.DayNight.Dialog">
         <item name="windowNoTitle">true</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowBackground">@android:color/transparent</item>
