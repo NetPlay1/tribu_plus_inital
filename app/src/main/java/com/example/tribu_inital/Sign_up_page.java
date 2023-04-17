@@ -218,8 +218,10 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
 
     @Override
-    public void onClick(View view) {
-      createUser();
+    public void onClick(View view){
+        createUser();
+//        intent = new Intent(Sign_up_page.this, User_photo_dialog.class);
+//        mStartDialog.launch(intent);
     }
 
 }
