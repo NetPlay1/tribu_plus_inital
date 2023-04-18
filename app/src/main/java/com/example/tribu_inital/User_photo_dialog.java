@@ -1,33 +1,20 @@
 package com.example.tribu_inital;
 
-import android.Manifest;
-import android.app.Activity;
+
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.ContactsContract;
 import android.provider.MediaStore;
-import android.provider.SyncStateContract;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
+
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.ThemedSpinnerAdapter;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 
-import java.io.File;
-import java.net.URI;
 
 public class User_photo_dialog extends AppCompatActivity implements View.OnClickListener {
 
@@ -39,9 +26,6 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
     ActivityResultLauncher<Intent> mPhotoFromGallery;
 
     Intent intent;
-
-    Uri uri;
-
 
 
 
@@ -91,6 +75,8 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
                 }
 
         );
+
+
 
         mPhotoFromGallery = registerForActivityResult(
           new ActivityResultContracts.StartActivityForResult(),
@@ -152,10 +138,12 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
 
     }
 
-
-
-
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setResult(RESULT_CANCELED);
+        finish();
+    }
 }
 
 
