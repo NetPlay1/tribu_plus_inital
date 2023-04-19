@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,6 +33,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.security.Key;
+import java.util.UUID;
 
 public class Sign_up_page extends AppCompatActivity implements View.OnClickListener {
 
@@ -62,6 +65,8 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
     String picName;
 
+    String uuid;
+
     ActivityResultLauncher<Intent> mStartDialog;
 
 
@@ -88,7 +93,6 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
         //write a message to data base
         firebaseAuth = FirebaseAuth.getInstance();
-
 
 
         submit.setOnClickListener(this);
@@ -144,8 +148,8 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
     private void continueCreatingUser(String camera_or_gallery) {
         firebaseAuth.createUserWithEmailAndPassword(
                         email.getText().toString(),
-                        pass.getText().toString())
-                .addOnCompleteListener(this, task -> {
+                        pass.getText().toString()
+                ).addOnCompleteListener(this, task -> {
 
                     //calling user photo dialog
 
@@ -157,42 +161,59 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
                     );
 
                     if (task.isSuccessful()){
-                        ref = database.getReference("Users").push();
+                        //creating uuid aka the session key ? (i think need to check)
+                        uuid = UUID.randomUUID().toString();
+
                         //creating the group / pointing to it
+                        ref = database.getReference("Users");
 
                         //setting the user-key/path and adding the user as the value
-                        ref.child(user.getKey()).setValue(user);
+                        ref.child(uuid).setValue(user);
+
+                        //setting the current user of the app
+                        FirebaseUser fireUser = firebaseAuth.getCurrentUser();
+
                         progressBar.setVisibility(View.GONE);
-                        mStorageRef = FirebaseStorage.getInstance().getReference("Images/Users/"+ user.getKey());
+
+                        /*
+                        looking for a /images/Users + uuid of user. in fireStorage if none existent makes the path and
+                        then creates the photo file
+                         */
+                        mStorageRef = FirebaseStorage.getInstance().getReference("Images/Users/"+ uuid);
                         mStorageRef = mStorageRef.child(picName);
+
+                        //checking where the photo came from and uploading file accordingly and then intents us to main page
                         if(camera_or_gallery.equals("gallery")) {
                             mStorageRef.putFile(uri).addOnSuccessListener(taskSnapshot ->
                                             Toast.makeText(this, "user photo uploaded Successfully!", Toast.LENGTH_SHORT).show())
                                             .addOnFailureListener(e -> Toast.makeText(this, "" + e, Toast.LENGTH_LONG).show());
                                             Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT).show();
+
+                                            intent = new Intent(Sign_up_page.this, Main_page.class);
+                                            startActivity(intent);
                         }
                         else
                         {
                             UploadTask uploadTask = mStorageRef.putBytes(bytes);
                             Toast.makeText(this, "user photo uploaded Successfully!", Toast.LENGTH_SHORT).show();
                             Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT).show();
+
+                            intent = new Intent(Sign_up_page.this, Main_page.class);
+                            startActivity(intent);
                         }
                     }
 
                 }).addOnFailureListener(e -> {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_SHORT).show();
+
+                    // Todo: make a martial Alert dialog for errors
                 });
 
     }
 
 
-    /*
-    *
-    * Basic validation for the user
-    *
-    * */
-
+    //Basic validation for the user
     public boolean isValidate(){
         if(name.getText().toString().length() < 3){
             name.setError("name must be at list 3 characters long");
@@ -215,7 +236,6 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
         }
         return true;
     }
-
 
     @Override
     public void onClick(View view){
