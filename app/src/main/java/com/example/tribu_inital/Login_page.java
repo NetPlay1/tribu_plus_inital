@@ -2,6 +2,7 @@ package com.example.tribu_inital;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,11 +11,18 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.Objects;
 
 public class Login_page extends AppCompatActivity implements View.OnClickListener {
 
-    EditText emailInput, passwordInput;
+    TextInputLayout emailInput, passwordInput;
+
+    String email, password;
 
     Button loginButton;
 
@@ -22,9 +30,9 @@ public class Login_page extends AppCompatActivity implements View.OnClickListene
 
     ProgressBar progressBar;
 
-    String email,password;
-
     Toast toast;
+
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +40,7 @@ public class Login_page extends AppCompatActivity implements View.OnClickListene
         setContentView(R.layout.activity_login_page);
 
         emailInput=findViewById(R.id.emailInput2);
-        passwordInput=findViewById(R.id.passwordInput);
+        passwordInput = findViewById(R.id.passwordInput);
         loginButton=findViewById(R.id.loginButton);
         layout=findViewById(R.id.display);
 
@@ -45,45 +53,39 @@ public class Login_page extends AppCompatActivity implements View.OnClickListene
         progressBar.setVisibility(View.GONE);
 
         loginButton.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View view) {
-        email=emailInput.getText().toString();
-        password=passwordInput.getText().toString();
+
+        email= Objects.requireNonNull(emailInput.getEditText()).getText().toString();
+        password= Objects.requireNonNull(passwordInput.getEditText()).getText().toString();
+
         progressBar.setVisibility(View.VISIBLE);
         try {
-            if(email.matches("")){
+            if (isValidated()) {
 
-                progressBar.setVisibility(View.GONE);
-                emailInput.setError("you didn't fill your email!");
-                emailInput.setFocusable(true);
-                throw new Exception("you didn't fill your email!");
-            }
+                final FirebaseAuth Auth = FirebaseAuth.getInstance();
 
-            if(password.matches("")) {
+                Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = Auth.getCurrentUser();
+                        toast = Toast.makeText(this, "Welcome Back!", Toast.LENGTH_SHORT);
+                        toast.show();
+                        progressBar.setVisibility(View.GONE);
 
-                progressBar.setVisibility(View.GONE);
-                passwordInput.setError("you didn't fill you password!");
-                passwordInput.setFocusable(true);
-                throw new Exception("you didn't fill you password!");
-            }
+                        intent = new Intent(Login_page.this, Main_page.class);
+                        startActivity(intent);
 
-            final FirebaseAuth Auth = FirebaseAuth.getInstance();
-
-            Auth.signInWithEmailAndPassword(email,password).addOnCompleteListener(task -> {
-                if(task.isSuccessful()){
-                    toast = Toast.makeText(this,"Welcome Back!",Toast.LENGTH_SHORT);
+                    }
+                }).addOnFailureListener(e -> {
+                    toast = Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG);
                     toast.show();
                     progressBar.setVisibility(View.GONE);
+                });
 
-                }
-            }).addOnFailureListener(e ->{
-                toast = Toast.makeText(this,""+e.getMessage(),Toast.LENGTH_LONG);
-                toast.show();
-                progressBar.setVisibility(View.GONE);
-            });
-
+            }
         }
 
         catch (Exception e){
@@ -91,5 +93,29 @@ public class Login_page extends AppCompatActivity implements View.OnClickListene
             toast = Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT);
             toast.show();
         }
+
+    }
+
+        //checking if emailInput and passwordInput aren't empty
+    public boolean isValidated(){
+
+        //removing all previous errors
+        emailInput.setError(null);
+        passwordInput.setError(null);
+
+        if(email.isEmpty()){
+            emailInput.setError("Email cannot be empty!");
+            emailInput.setFocusable(true);
+            progressBar.setVisibility(View.GONE);
+            return false;
+        }
+
+        if(password.isEmpty()){
+            passwordInput.setError("password cannot be empty!");
+            passwordInput.setFocusable(true);
+            progressBar.setVisibility(View.GONE);
+            return false;
+        }
+        return true;
     }
 }
