@@ -2,9 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-feature android:name="android.hardware.camera.any"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera.any" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,12 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
-
         <activity
             android:name=".User_photo_dialog"
-            android:theme="@style/transperntDialog"
             android:exported="false"
-            />
+            android:theme="@style/transperntDialog" />
         <activity
             android:name=".Login_page"
             android:exported="false" />
@@ -32,6 +31,9 @@
             android:exported="false" />
         <activity
             android:name=".Start_page"
+            android:exported="false"/>
+        <activity
+            android:name=".Loading_page"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
