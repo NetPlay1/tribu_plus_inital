@@ -3,4 +3,7 @@
     <style name="AppTheme.Dialog" parent="AppTheme">
 
     </style>
+    <style name="AppTheme.TextInput" parent="ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense">
+        <item name="android:label">@string/app_name</item>
+    </style>
 </resources>
