@@ -5,8 +5,6 @@ import android.net.Uri;
 import java.io.Serializable;
 import java.util.UUID;
 
-// Todo: ask zehava why do we need to build user 2 times
-
 public class User implements Serializable {
     private String name;
 
