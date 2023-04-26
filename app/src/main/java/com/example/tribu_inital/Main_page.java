@@ -29,7 +29,7 @@ public class Main_page extends AppCompatActivity {
 
          user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Toast.makeText(this,""+user.getUid(),Toast.LENGTH_LONG).show();
+        assert user != null;
         userName.setText(user.getEmail());
 
     }
