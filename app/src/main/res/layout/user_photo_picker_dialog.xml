@@ -56,7 +56,7 @@
             android:layout_height="120sp"
             android:drawableTop="@drawable/camera_icon"
             android:text="yes, with camera"
-            android:backgroundTint="?attr/colorPrimaryInverse"
+            android:backgroundTint="?attr/colorPrimary"
             android:textColor="#ffff"
             app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Small"
             android:textSize="12sp"

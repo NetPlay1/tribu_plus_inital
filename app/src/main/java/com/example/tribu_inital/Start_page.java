@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class Start_page extends AppCompatActivity implements View.OnClickListener {
 
     Button signUpButton, loginButton;
 
     Intent intent;
+
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +26,16 @@ public class Start_page extends AppCompatActivity implements View.OnClickListene
 
         signUpButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
+
+        //Todo: remove this later need better solution (only testing)
+        firebaseAuth = FirebaseAuth.getInstance();
+
+        if(firebaseAuth.getCurrentUser() !=null){
+            intent = new Intent(Start_page.this, Main_page.class);
+            startActivity(intent);
+            finish();
+        }
+
     }
 
     @Override
