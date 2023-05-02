@@ -6,4 +6,8 @@
     <style name="AppTheme.TextInput" parent="ThemeOverlay.Material3.TextInputEditText.OutlinedBox.Dense">
         <item name="android:label">@string/app_name</item>
     </style>
+
+    <style name="AppTheme.UserButton">
+        <item name="drawableSize">30sp</item>
+    </style>
 </resources>

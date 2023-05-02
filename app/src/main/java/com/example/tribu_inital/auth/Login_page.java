@@ -1,4 +1,4 @@
-package com.example.tribu_inital;
+package com.example.tribu_inital.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
+import com.example.tribu_inital.Main_ui;
+import com.example.tribu_inital.R;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -75,7 +75,7 @@ public class Login_page extends AppCompatActivity implements View.OnClickListene
                         toast.show();
                         progressBar.setVisibility(View.GONE);
 
-                        intent = new Intent(Login_page.this, Main_page.class);
+                        intent = new Intent(Login_page.this, Main_ui.class);
                         startActivity(intent);
 
                     }

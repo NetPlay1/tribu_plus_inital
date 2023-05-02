@@ -5,7 +5,6 @@
     <uses-feature android:name="android.hardware.camera.any" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -21,19 +20,19 @@
             android:exported="false"
             android:theme="@style/transperntDialog" />
         <activity
-            android:name=".Login_page"
+            android:name=".auth.Login_page"
             android:exported="false" />
         <activity
-            android:name=".Main_page"
+            android:name=".Main_ui"
             android:exported="false" />
         <activity
-            android:name=".Sign_up_page"
+            android:name=".auth.Sign_up_page"
             android:exported="false" />
         <activity
-            android:name=".Start_page"
+            android:name=".start.Start_page"
             android:exported="false"/>
         <activity
-            android:name=".Loading_page"
+            android:name=".start.Loading_page"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

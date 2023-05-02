@@ -1,4 +1,4 @@
-package com.example.tribu_inital;
+package com.example.tribu_inital.auth;
 
 
 
@@ -12,11 +12,14 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.tribu_inital.Main_ui;
+import com.example.tribu_inital.R;
+import com.example.tribu_inital.User;
+import com.example.tribu_inital.User_photo_dialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -183,7 +186,7 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
 
                         }
                         Toast.makeText(getApplicationContext(),"Account created!",Toast.LENGTH_SHORT).show();
-                        intent = new Intent(Sign_up_page.this, Main_page.class);
+                        intent = new Intent(Sign_up_page.this, Main_ui.class);
                         startActivity(intent);
                     }
 
