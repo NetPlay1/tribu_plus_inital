@@ -1,4 +1,4 @@
-package com.example.tribu_inital;
+package com.example.tribu_inital.fragments;
 
 import android.os.Bundle;
 
@@ -8,12 +8,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Tool_bar extends Fragment {
+import com.example.tribu_inital.R;
 
 
-    public Tool_bar() {
+
+public class home_fragment extends Fragment {
+
+    View view;
+
+    public home_fragment() {
         // Required empty public constructor
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +30,12 @@ public class Tool_bar extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tool_bar, container, false);
+
+        view = inflater.inflate(R.layout.fragment_home_fragment, container, false);
+
+        
+
+
+        return view;
     }
 }

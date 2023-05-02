@@ -1,4 +1,4 @@
-package com.example.tribu_inital;
+package com.example.tribu_inital.start;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -6,12 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
+import com.example.tribu_inital.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 public class Loading_page extends AppCompatActivity {

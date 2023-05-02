@@ -1,4 +1,4 @@
-package com.example.tribu_inital;
+package com.example.tribu_inital.start;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.tribu_inital.Main_ui;
+import com.example.tribu_inital.R;
+import com.example.tribu_inital.auth.Login_page;
+import com.example.tribu_inital.auth.Sign_up_page;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Start_page extends AppCompatActivity implements View.OnClickListener {
@@ -31,7 +35,7 @@ public class Start_page extends AppCompatActivity implements View.OnClickListene
         firebaseAuth = FirebaseAuth.getInstance();
 
         if(firebaseAuth.getCurrentUser() !=null){
-            intent = new Intent(Start_page.this, Main_page.class);
+            intent = new Intent(Start_page.this, Main_ui.class);
             startActivity(intent);
             finish();
         }

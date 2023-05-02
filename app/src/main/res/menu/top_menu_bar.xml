@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/search_bar_icon"
+        android:icon="@drawable/baseline_search_24"
+        app:showAsAction="ifRoom"
+        android:title="account"/>
+    <item
+        android:id="@+id/notification_page_icon"
+        android:icon="@drawable/baseline_notifications_24"
+        app:showAsAction="ifRoom"
+        android:title="notifications"/>
+</menu>
