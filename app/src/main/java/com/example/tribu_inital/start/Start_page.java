@@ -1,5 +1,6 @@
 package com.example.tribu_inital.start;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -11,6 +12,7 @@ import com.example.tribu_inital.Main_ui;
 import com.example.tribu_inital.R;
 import com.example.tribu_inital.auth.Login_page;
 import com.example.tribu_inital.auth.Sign_up_page;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Start_page extends AppCompatActivity implements View.OnClickListener {
@@ -35,9 +37,19 @@ public class Start_page extends AppCompatActivity implements View.OnClickListene
         firebaseAuth = FirebaseAuth.getInstance();
 
         if(firebaseAuth.getCurrentUser() !=null){
-            intent = new Intent(Start_page.this, Main_ui.class);
-            startActivity(intent);
-            finish();
+            //building a dialog to ask the user if he want to sign in to this account
+            AlertDialog dialog = new MaterialAlertDialogBuilder(Start_page.this)
+                    .setTitle("Account detected!")
+                    .setMessage("Do you want to connect to account with the email:"+firebaseAuth.getCurrentUser().getEmail())
+                    .setNegativeButton("NO",((dialogInterface, i) -> {
+                        finish();
+                    }))
+                    .setPositiveButton("YES",((dialogInterface, i) -> {
+                        intent = new Intent(Start_page.this, Main_ui.class);
+                        startActivity(intent);
+                        finish();
+                    }))
+                    .show();
         }
 
     }

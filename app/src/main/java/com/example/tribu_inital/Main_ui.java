@@ -61,6 +61,7 @@ public class Main_ui extends AppCompatActivity implements View.OnClickListener {
             intent = new Intent(Main_ui.this, Start_page.class);
             startActivity(intent);
             finish();
+            
         }
 
 

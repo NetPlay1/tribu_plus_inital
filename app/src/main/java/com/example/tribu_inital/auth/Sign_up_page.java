@@ -153,8 +153,13 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
                     );
 
                     if (task.isSuccessful()){
+
+                        //setting the current user of the app
+                        FirebaseUser fireUser = firebaseAuth.getCurrentUser();
+
                         //creating uuid aka the session key ? (i think need to check)
-                        uuid = UUID.randomUUID().toString();
+
+                        uuid = Objects.requireNonNull(fireUser).getUid();
 
                         //creating the group / pointing to it
                         ref = database.getReference("Users");
@@ -162,8 +167,7 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
                         //setting the user-key/path and adding the user as the value
                         ref.child(uuid).setValue(user);
 
-                        //setting the current user of the app
-                        FirebaseUser fireUser = firebaseAuth.getCurrentUser();
+
 
                         progressBar.setVisibility(View.GONE);
 

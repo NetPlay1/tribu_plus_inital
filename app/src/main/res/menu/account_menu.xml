@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/account_info_icon"
+        android:icon="@drawable/baseline_person_24"
+        android:title="account info" />
+    <item
+        android:id="@+id/account_setting_page"
+        android:icon="@drawable/baseline_settings_24"
+        android:title="account settings"/>
+    <item
+        android:id="@+id/logout_icon"
+        android:icon="@drawable/baseline_exit_to_app_24"
+        android:iconTint="?attr/colorError"
+        android:title="logout"/>
+</menu>

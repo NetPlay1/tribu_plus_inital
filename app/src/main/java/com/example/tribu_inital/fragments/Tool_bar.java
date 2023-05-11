@@ -1,27 +1,21 @@
 package com.example.tribu_inital.fragments;
 
+
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
-import android.widget.Toast;
+
 
 import com.example.tribu_inital.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.navigation.NavigationView;
 
-import java.util.Objects;
-import java.util.Vector;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 
 public class Tool_bar extends Fragment {
 
@@ -35,7 +29,6 @@ public class Tool_bar extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
@@ -55,6 +48,7 @@ public class Tool_bar extends Fragment {
         bottomNavigation.setOnItemSelectedListener(item -> {
             fragmentTransaction.addToBackStack(null);
             FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
+
             switch (item.getItemId())
             {
                 case R.id.explore_page_icon:{
