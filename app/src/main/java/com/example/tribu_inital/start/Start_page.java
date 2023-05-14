@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -42,7 +43,7 @@ public class Start_page extends AppCompatActivity implements View.OnClickListene
                     .setTitle("Account detected!")
                     .setMessage("Do you want to connect to account with the email:"+firebaseAuth.getCurrentUser().getEmail())
                     .setNegativeButton("NO",((dialogInterface, i) -> {
-                        finish();
+                        Log.d("Material-alert","alert canceled");
                     }))
                     .setPositiveButton("YES",((dialogInterface, i) -> {
                         intent = new Intent(Start_page.this, Main_ui.class);

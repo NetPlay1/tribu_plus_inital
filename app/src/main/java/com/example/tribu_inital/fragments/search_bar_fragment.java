@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.View;
@@ -28,9 +29,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.UUID;
 
 public class search_bar_fragment extends Fragment {
 
@@ -39,6 +42,9 @@ public class search_bar_fragment extends Fragment {
     PopupMenu popupMenu;
 
     FirebaseDatabase database;
+
+    StorageReference storeRef;
+
 
     DatabaseReference ref;
 
@@ -75,12 +81,39 @@ public class search_bar_fragment extends Fragment {
 
         database = FirebaseDatabase.getInstance();
 
+        String uuid = Objects.requireNonNull(user).getUid();
+
         ref = database.getReference("Users");
 
-        ref = database.getReference(Objects.requireNonNull(user).getUid());
+        ref = ref.child(uuid);
+
+
+        ref.get().addOnCompleteListener(task -> {
+            if(!task.isSuccessful()){
+                Log.e("firebase","error getting the data"+ task.getException());
+
+            }
+            // getting a the photo name from current user
+            String uri_name = Objects. requireNonNull(
+                    task.getResult().child("uri").getValue()).toString();
+
+
+            storeRef = storeRef.child("Images/Users/"+uuid);
+
+            storeRef.child(uri_name).getDownloadUrl().addOnSuccessListener(uri -> {
+
+                imageButton.setImageURI(uri);
+
+            }).addOnFailureListener(e -> {
+                Log.d("store...",""+e.getMessage());
+
+            });
 
 
 
+        }).addOnFailureListener(e -> {
+            Log.d("not working",""+e.getMessage());
+        });
 
 
 
