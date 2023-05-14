@@ -1,5 +1,7 @@
 package com.example.tribu_inital.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -7,12 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -28,17 +32,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.UUID;
 
 public class search_bar_fragment extends Fragment {
 
-    ImageButton imageButton;
+    ImageView imageButton;
 
     PopupMenu popupMenu;
 
     FirebaseDatabase database;
+
+    StorageReference storeRef;
+
 
     DatabaseReference ref;
 
@@ -75,12 +84,41 @@ public class search_bar_fragment extends Fragment {
 
         database = FirebaseDatabase.getInstance();
 
+        String uuid = Objects.requireNonNull(user).getUid();
+
         ref = database.getReference("Users");
 
-        ref = database.getReference(Objects.requireNonNull(user).getUid());
+        ref = ref.child(uuid);
+
+
+        ref.get().addOnCompleteListener(task -> {
+            if(!task.isSuccessful()){
+                Log.e("firebase","error getting the data"+ task.getException());
+
+            }
+
+            //TODO: clean code
+
+            // getting a the photo name from current user
+            String uri_name = Objects.requireNonNull
+                    (task.getResult().child("uri").getValue()).toString();
+
+            //pointing to storage folders
+            storeRef = FirebaseStorage.getInstance().getReference("Images/Users/"+uuid);
+            //getting image bytes
+            storeRef.child(uri_name).getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
+                //decoding bytes
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                imageButton.setImageBitmap
+                        (Bitmap.createScaledBitmap(bmp, 30,30,false));
+            });
 
 
 
+        }).addOnFailureListener(e -> {
+            Log.d("not working",""+e.getMessage());
+        });
 
 
 

@@ -20,12 +20,12 @@
         app:menu="@menu/top_menu_bar">
 
 
-        <ImageButton
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/user_image"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:background="@mipmap/user"
-
+            app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Large"
             android:contentDescription="user_icon" />
 
         <TextView

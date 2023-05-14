@@ -13,8 +13,10 @@ import android.widget.Toast;
 import com.example.tribu_inital.fragments.Tool_bar;
 import com.example.tribu_inital.fragments.search_bar_fragment;
 import com.example.tribu_inital.start.Start_page;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.StorageReference;
 
 public class Main_ui extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,6 +24,7 @@ public class Main_ui extends AppCompatActivity implements View.OnClickListener {
 
     Intent intent;
     FirebaseUser user;
+
 
     @Override
 
