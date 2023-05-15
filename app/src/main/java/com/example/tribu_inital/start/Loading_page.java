@@ -56,9 +56,12 @@ public class Loading_page extends AppCompatActivity {
                                 .setMessage("Do you want to restart the app")
 
                                 .setPositiveButton("YES", (dialogInterface, i) -> {
+
                                     intent = new Intent(Loading_page.this, Loading_page.class);
                                     startActivity(intent);
                                     finish();
+
+                                    dialogInterface.dismiss();
                                 })
 
                                 .setNegativeButton("NO", (dialogInterface, i) -> {

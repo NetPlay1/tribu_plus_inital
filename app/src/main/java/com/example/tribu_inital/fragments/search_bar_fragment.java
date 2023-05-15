@@ -1,11 +1,10 @@
 package com.example.tribu_inital.fragments;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 
@@ -15,28 +14,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.Toast;
 
 
 import com.example.tribu_inital.R;
-import com.example.tribu_inital.User;
-import com.google.android.gms.tasks.Task;
+import com.example.tribu_inital.start.Start_page;
 import com.google.firebase.auth.FirebaseAuth;
+
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.io.File;
 import java.util.Objects;
-import java.util.UUID;
 
 public class search_bar_fragment extends Fragment {
 
@@ -136,8 +130,40 @@ public class search_bar_fragment extends Fragment {
         //forcing the the menu to show icons
         popupMenu.setForceShowIcon(true);
 
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            if(menuItem.getItemId() == R.id.logout_icon) {
+                FirebaseAuth.getInstance().signOut();
+
+                Intent intent= new Intent(getActivity(), Start_page.class);
+                startActivity(intent);
+            }
+
+            switch (menuItem.getItemId()) {
+                case R.id.account_setting_page:
+                    //TODO: add the page
+                    break;
+
+                case R.id.account_info_icon:
+                    //TODO: add the page
+                    break;
+
+                case R.id.logout_icon:
+                    FirebaseAuth.getInstance().signOut();
+
+                    Intent intent= new Intent(getActivity(), Start_page.class);
+                    startActivity(intent);
+                    break;
+            }
+
+
+            return false;
+        });
+
+
+
         popupMenu.show();
     }
+
 
 
 }
