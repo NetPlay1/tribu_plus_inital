@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="250sp"
+        android:layout_width="300sp"
         android:layout_height="250sp"
         style="@style/Widget.Material3.CardView.Filled"
         android:layout_marginTop="40sp"
@@ -50,4 +51,4 @@
 
 
     </com.google.android.material.card.MaterialCardView>
-</RelativeLayout>
+</FrameLayout>

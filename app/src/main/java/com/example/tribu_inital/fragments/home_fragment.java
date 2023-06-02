@@ -48,6 +48,7 @@ public class home_fragment extends Fragment {
         List<Activity_item> items = new ArrayList<Activity_item>();
         items.add(new Activity_item("john's bakery",R.drawable.baseline_add_circle_24));
         items.add(new Activity_item("Bob's shop",R.drawable.baseline_add_circle_24));
+        items.add(new Activity_item("cabbage Was here",R.drawable.baseline_add_circle_24));
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
 
