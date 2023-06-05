@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".user_page_fragment">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/bigUserImage"
+        android:layout_width="250sp"
+        android:layout_height="250sp"
+        android:src="@drawable/baseline_arrow_forward_24"
+        app:shapeAppearance="@style/Widget.Material3.CardView.Outlined"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40sp"/>
+
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:textAlignment="center"
+        android:layout_gravity="center"
+        android:layout_marginTop="40sp"
+        android:text="name"/>
+
+
+</FrameLayout>

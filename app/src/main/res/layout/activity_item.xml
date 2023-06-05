@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="300sp"
+        android:layout_width="250sp"
         android:layout_height="250sp"
         style="@style/Widget.Material3.CardView.Filled"
         android:layout_marginTop="40sp"
@@ -44,8 +44,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="20sp"
+                style="@style/Widget.Material3.Button.TonalButton"
                 android:text="join now!"
-                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Small"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.None"
                 />
         </LinearLayout>
 

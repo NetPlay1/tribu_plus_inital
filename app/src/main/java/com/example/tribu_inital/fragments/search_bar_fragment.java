@@ -6,6 +6,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 
 import android.util.Log;
@@ -20,6 +22,7 @@ import android.widget.PopupMenu;
 
 import com.example.tribu_inital.R;
 import com.example.tribu_inital.start.Start_page;
+import com.example.tribu_inital.user_page_fragment;
 import com.google.firebase.auth.FirebaseAuth;
 
 import com.google.firebase.auth.FirebaseUser;
@@ -45,6 +48,11 @@ public class search_bar_fragment extends Fragment {
 
     DatabaseReference ref;
 
+    Intent intent;
+
+    FragmentManager fragmentManager;
+    FragmentTransaction fragmentTransaction;
+
 
     public search_bar_fragment() {
         // Required empty public constructor
@@ -66,6 +74,9 @@ public class search_bar_fragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.search_bar_fragment, container, false);
+
+        fragmentManager = requireActivity().getSupportFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
         imageButton = view.findViewById(R.id.user_image);
 
@@ -137,14 +148,17 @@ public class search_bar_fragment extends Fragment {
                 Intent intent= new Intent(getActivity(), Start_page.class);
                 startActivity(intent);
             }
-
+            fragmentTransaction.addToBackStack(null);
+            FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.account_setting_page:
                     //TODO: add the page
                     break;
 
                 case R.id.account_info_icon:
-                    //TODO: add the page
+                    fragmentTransaction1.replace
+                            (R.id.fragment_container, new user_page_fragment()).commit();
+
                     break;
 
                 case R.id.logout_icon:
