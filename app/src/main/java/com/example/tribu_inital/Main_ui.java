@@ -33,7 +33,6 @@ public class Main_ui extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_ui);
-        startActivityIntent();
 
 
         try {
@@ -80,7 +79,4 @@ public class Main_ui extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    public void startActivityIntent(){
-        Toast.makeText(getApplicationContext(),"cum",Toast.LENGTH_SHORT).show();
-    }
 }

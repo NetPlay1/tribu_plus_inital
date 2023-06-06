@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Add_Activity_page_fragment">
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.Material3.Dialog"
+        android:orientation="vertical"
+        style="@style/Widget.Material3.CardView.Elevated"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="create post!"
+            android:textAlignment="center"
+            android:layout_marginTop="20sp"
+            style="@style/TextAppearance.Material3.TitleLarge"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="150sp"
+            android:layout_height="150sp"
+            android:src="@drawable/baseline_add_photo_alternate_24"
+            android:layout_marginTop="40sp"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="250sp"
+            android:id="@+id/titleInput"
+            android:layout_marginTop="40sp"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:hint="title:"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="250sp"
+            android:id="@+id/descriptionInput"
+            android:layout_marginTop="20sp"
+            android:layout_height="140sp">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:layout_width="match_parent"
+                android:layout_height="130sp"
+                android:inputType="text|textMultiLine"
+                android:gravity="top"
+                android:hint="write description here:"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:paddingTop="20sp"
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/postButton"
+                android:layout_width="150sp"
+                android:layout_height="wrap_content"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:text="post"/>
+
+            <Space
+                android:layout_width="15sp"
+                android:layout_height="wrap_content"/>
+
+            <Button
+                android:id="@+id/dismissdButton"
+                android:layout_width="150sp"
+                android:layout_height="wrap_content"
+                android:text="discard"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+</FrameLayout>

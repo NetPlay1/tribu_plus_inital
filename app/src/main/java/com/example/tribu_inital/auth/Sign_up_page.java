@@ -32,7 +32,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Sign_up_page extends AppCompatActivity implements View.OnClickListener {
 
