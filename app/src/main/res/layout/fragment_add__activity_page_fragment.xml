@@ -29,12 +29,18 @@
             android:gravity="center"
             android:layout_height="wrap_content">
 
-        <ImageView
-            android:layout_width="150sp"
-            android:layout_height="150sp"
-            android:src="@drawable/baseline_add_photo_alternate_24"
-            android:layout_marginTop="40sp"
-            />
+
+
+                <ImageView
+                    android:id="@+id/changeImage"
+                    android:layout_width="150sp"
+                    android:layout_height="150sp"
+                    android:src="@drawable/baseline_add_photo_alternate_24"
+                    android:contentDescription="add post image"
+                    />
+
+
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="250sp"

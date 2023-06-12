@@ -107,8 +107,8 @@ public class Sign_up_page extends AppCompatActivity implements View.OnClickListe
                         return;
                     }
 
-                    if(data.getStringExtra("photo") == null) {
-                        uri = data.getData();
+                    if(data.getStringExtra("photo") != null) {
+                        uri = Uri.parse(String.valueOf(data.getExtras().get("photo")));
                         picName = System.currentTimeMillis() + ".jpg";
                         continueCreatingUser("gallery");
                         return;

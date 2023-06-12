@@ -27,7 +27,7 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
 
     Intent intent;
 
-
+    //todo: not fully stable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,6 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
                         intent = new Intent();
 
                         intent.putExtra("image", imageBitmap);
-                        intent.putExtra("photo","photo");
                         setResult(RESULT_OK,intent);
                         finish();
                     }
@@ -94,7 +93,7 @@ public class User_photo_dialog extends AppCompatActivity implements View.OnClick
                          and setting the result of this Activity result as successful
                      */
                     intent = new Intent();
-                    intent.setData(data.getData());
+                    intent.putExtra("photo",data.getData().toString());
                     getBaseContext().getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     setResult(RESULT_OK,intent);
                     finish();
