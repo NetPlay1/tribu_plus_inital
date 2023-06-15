@@ -1,7 +1,5 @@
 package com.example.tribu_inital;
 
-import android.net.Uri;
-
 import java.io.Serializable;
 
 public class Post implements Serializable{
@@ -14,6 +12,9 @@ public class Post implements Serializable{
 
     private String ownerUid;
 
+
+
+
     public Post(String title, String description, String uri , String ownerUid) {
 
         this.title = title;
@@ -22,6 +23,11 @@ public class Post implements Serializable{
         this.ownerUid = ownerUid;
 
     }
+
+    public Post(){
+
+    }
+
 
     public String getTitle() {
         return title;

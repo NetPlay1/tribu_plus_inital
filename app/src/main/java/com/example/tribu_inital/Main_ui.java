@@ -16,6 +16,8 @@ import com.example.tribu_inital.start.Start_page;
 import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 
 public class Main_ui extends AppCompatActivity implements View.OnClickListener {
@@ -26,9 +28,15 @@ public class Main_ui extends AppCompatActivity implements View.OnClickListener {
     FirebaseUser user;
 
 
+
     @Override
 
     // Todo : this is just a test need to research more
+
+
+
+    //Todo: get all the data here and then send it to the fragments
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,8 @@ public class Main_ui extends AppCompatActivity implements View.OnClickListener {
             user = FirebaseAuth.getInstance().getCurrentUser();
 
             if(user == null) throw new Exception("no user connected");
+
+
 
             FragmentManager fragmentManager=getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

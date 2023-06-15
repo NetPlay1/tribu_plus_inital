@@ -17,6 +17,6 @@ public class Activity_list_holder extends RecyclerView.ViewHolder{
     public Activity_list_holder(@NonNull View itemView) {
         super(itemView);
         title = itemView.findViewById(R.id.activity_title);
-        imageView = itemView.findViewById(R.id.activity_image);
+        //imageView = itemView.findViewById(R.id.activity_image);
     }
 }

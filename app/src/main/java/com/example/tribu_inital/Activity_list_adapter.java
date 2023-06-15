@@ -33,7 +33,7 @@ public class Activity_list_adapter extends RecyclerView.Adapter<Activity_list_ho
         //Todo: build the whole activity system and get the image view from the data base
         //this is just a test
 
-        holder.imageView.setImageResource(items.get(position).getImage());
+        //holder.imageView.setImageResource(items.get(position).getImage());
         holder.title.setText(items.get(position).getTitle());
     }
 

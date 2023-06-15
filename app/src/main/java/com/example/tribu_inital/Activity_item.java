@@ -1,12 +1,16 @@
 package com.example.tribu_inital;
 
-public class Activity_item {
-    private String title;
-    private int image;
+import android.net.Uri;
 
-    public Activity_item (String title,int Image){
+import java.io.Serializable;
+
+public class Activity_item implements Serializable {
+    private String title;
+    private String uri;
+
+    public Activity_item (String title,String uri){
         this.title = title;
-        this.image = Image;
+        this.uri = uri;
     }
 
 
@@ -18,11 +22,11 @@ public class Activity_item {
         this.title = title;
     }
 
-    public int getImage() {
-        return image;
+    public String getUri(){
+        return uri;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 }
