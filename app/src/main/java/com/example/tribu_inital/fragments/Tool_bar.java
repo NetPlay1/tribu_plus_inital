@@ -40,9 +40,8 @@ public class Tool_bar extends Fragment {
 
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.replace
-                (R.id.fragment_container, new home_fragment()).commit();
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
 
         bottomNavigation.setOnItemSelectedListener(item -> {

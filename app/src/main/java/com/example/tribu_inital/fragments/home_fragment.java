@@ -1,5 +1,7 @@
 package com.example.tribu_inital.fragments;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import com.example.tribu_inital.Add_Activity_page_fragment;
 import com.example.tribu_inital.Post;
 import com.example.tribu_inital.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +48,11 @@ public class home_fragment extends Fragment {
 
     FirebaseStorage firebaseStorage;
 
+    StorageReference storeRef;
+
     DatabaseReference ref;
 
+    Bitmap bmp;
     public home_fragment() {
         // Required empty public constructor
     }
@@ -54,12 +61,14 @@ public class home_fragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("homefragment", "on create" );
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.d("homefragment", "createView" );
 
         View view = inflater.inflate(R.layout.fragment_home_fragment, container, false);
 
@@ -67,7 +76,10 @@ public class home_fragment extends Fragment {
 
         List<Post> items = new ArrayList<>();
 
-        List<Activity_item> posts= new  ArrayList<>();
+        List<Activity_item> posts= new ArrayList<>();
+
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
 //        items.add(new Activity_item("john's bakery",R.drawable.baseline_add_circle_24));
 //        items.add(new Activity_item("Bob's shop",R.drawable.baseline_add_circle_24));
@@ -83,33 +95,49 @@ public class home_fragment extends Fragment {
         ref = database.getReference("Posts");
 
 
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        Activity_list_adapter adapter = new Activity_list_adapter(getContext(),posts);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setAdapter(adapter);
 
-        ref.addValueEventListener(new ValueEventListener(){
 
+
+        ValueEventListener eventListener = ref.addValueEventListener(new ValueEventListener(){
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                //clearing the whole list
+                posts.clear();
 
-                // 
-                List<Activity_item> posts= new  ArrayList<>();
-
+                Log.d("homefragment", "" + 1);
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                        Log.d("homefragment", "" + dataSnapshot.getValue());
                         Post post = dataSnapshot.getValue(Post.class);
-                        //Todo: learn to cash posts
+                        Log.d("homefragment", "" + post.getTitle());
+                    //Todo: learn to cash posts
                         //Todo: getting only the new posts
                         //Todo: getting all post when first loading the page
+
                         assert post != null;
-                        posts.add(new Activity_item(post.getTitle(), post.getUri()));
+                        storeRef = FirebaseStorage.getInstance().getReference("Images/Posts/");
 
-                }
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                Activity_list_adapter adapter = new  Activity_list_adapter(getContext(),posts);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setAdapter(adapter);
+                        storeRef.child(post.getUri()).getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
+                            //decoding bytes
+                            bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                            Log.d("homefragment", "found image");
+                            adapter.notifyDataSetChanged();
 
-                adapter.notifyDataSetChanged();
+
+                            posts.add(new Activity_item(post.getTitle(), bmp));
+                        }).addOnFailureListener(e -> {
+                            Log.e("homefragment", "" + e.getMessage());
+
+                        });
+
+                    }
+
+                Log.d("homefragment", "--adapter change--");
+
 
             }
 
@@ -120,6 +148,7 @@ public class home_fragment extends Fragment {
 
 
             });
+
 
         return view;
     }

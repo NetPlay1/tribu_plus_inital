@@ -1,6 +1,8 @@
 package com.example.tribu_inital;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -33,8 +35,15 @@ public class Activity_list_adapter extends RecyclerView.Adapter<Activity_list_ho
         //Todo: build the whole activity system and get the image view from the data base
         //this is just a test
 
-        //holder.imageView.setImageResource(items.get(position).getImage());
+
         holder.title.setText(items.get(position).getTitle());
+        holder.imageView.setImageBitmap(
+                (Bitmap.createScaledBitmap(items.get(position).getBpm()
+                        ,items.get(position).getBpm().getWidth(),
+                                items.get(position).getBpm().getHeight(),
+                                false)));
+        Log.d("activity-adapter", "image loaded ?");
+
     }
 
     @Override

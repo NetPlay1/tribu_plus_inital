@@ -1,8 +1,10 @@
 package com.example.tribu_inital;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -77,11 +79,11 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
                     // checking for no nulls / that the task was completed successfully
                     if(result.getResultCode() !=-1 || data == null) return;
 
-                    if(data.getStringExtra("image") != null) {
+                    if((Bitmap) data.getExtras().get("image") != null) {
 
                         //Todo: create func that look like thiscontinueCreatingUser("gallery");
 
-                        Bitmap bitmap = (Bitmap) data.getExtras().get("photo");
+                        Bitmap bitmap = (Bitmap) data.getExtras().get("image");
 
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         bitmap.compress(Bitmap.CompressFormat.JPEG,100, baos);
@@ -98,6 +100,8 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add__activity_page_fragment, container, false);
 
@@ -183,25 +187,27 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
             ref.child(uuid).setValue(post);
 
 
-            storeRef = FirebaseStorage.getInstance().getReference("Images/Users/" + user.getUid());
-            storeRef = storeRef.child(picName);
-        if(bytes == null) {
-            storeRef.putFile(Uri.parse(uri))
-                    .addOnSuccessListener(taskSnapshot -> {
-                        Log.d("addActivityFragment", "post was added");
-                    }).addOnFailureListener(e -> {
-                        Log.d("addActivityFragment", "Error" + e.getMessage());
+            storeRef = FirebaseStorage.getInstance().getReference("Images/Posts/"+picName);
 
-                    });
-            dismiss();
-            return;
-        }
+            if(bytes == null) {
+                storeRef.putFile(Uri.parse(uri))
+                        .addOnSuccessListener(taskSnapshot -> {
+                            Log.d("addActivityFragment", "post was added");
+                        }).addOnFailureListener(e -> {
+                            Log.d("addActivityFragment", "Error" + e.getMessage());
+
+                        });
+                dismiss();
+                return;
+            }
 
             UploadTask uploadTask = (UploadTask) storeRef.putBytes(bytes).addOnSuccessListener(taskSnapshot -> {
                 Log.d( "addActivityFragment","post uploaded successfully");
             }).addOnFailureListener(e ->{
                 Log.d("addActivityFragment","failed to post"+e.getMessage());
             });
+
+            loadThread.start();
 
             dismiss();
 
@@ -211,7 +217,26 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
         }
 
 
-    }
 
+    }
+    Thread loadThread = new Thread() {
+        @Override
+        public void run() {
+            super.run();
+
+            synchronized (this) {
+
+
+                // waiting for 3 seconds
+                try{
+
+                    wait(3000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+    };
 
 }

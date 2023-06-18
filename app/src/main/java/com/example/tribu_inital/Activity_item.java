@@ -1,16 +1,18 @@
 package com.example.tribu_inital;
 
-import android.net.Uri;
+
+
+import android.graphics.Bitmap;
 
 import java.io.Serializable;
 
 public class Activity_item implements Serializable {
     private String title;
-    private String uri;
+    private Bitmap bpm;
 
-    public Activity_item (String title,String uri){
+    public Activity_item (String title, Bitmap bpm){
         this.title = title;
-        this.uri = uri;
+        this.bpm = bpm;
     }
 
 
@@ -22,11 +24,12 @@ public class Activity_item implements Serializable {
         this.title = title;
     }
 
-    public String getUri(){
-        return uri;
+    public Bitmap getBpm(){
+        return bpm;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setBpm(Bitmap bpm) {
+
+        this.bpm = bpm;
     }
 }

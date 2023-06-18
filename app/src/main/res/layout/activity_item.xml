@@ -19,10 +19,14 @@
             android:orientation="vertical"
             android:layout_height="match_parent">
 
-            <ImageView
+
+            <!--            Todo: rn i'm starching the image with scale type change it-->
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/activity_image"
                 android:layout_width="match_parent"
+                app:shapeAppearance="@drawable/round_corners"
                 android:layout_height="124sp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/quit_icon"/>
 
             <LinearLayout
@@ -39,7 +43,6 @@
                     android:text="activity1"/>
 
             </LinearLayout>
-
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
