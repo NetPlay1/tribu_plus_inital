@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.shape.CornerFamily;
+import com.google.android.material.shape.ShapeAppearanceModel;
+
 import java.util.List;
 
 public class Activity_list_adapter extends RecyclerView.Adapter<Activity_list_holder> {
@@ -43,6 +46,7 @@ public class Activity_list_adapter extends RecyclerView.Adapter<Activity_list_ho
                                 items.get(position).getBpm().getHeight(),
                                 false)));
         Log.d("activity-adapter", "image loaded ?");
+
 
     }
 

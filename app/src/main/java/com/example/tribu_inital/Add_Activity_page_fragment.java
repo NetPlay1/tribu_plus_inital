@@ -11,8 +11,11 @@ import android.os.Bundle;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,8 +25,16 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.example.tribu_inital.auth.Sign_up_page;
+import com.example.tribu_inital.fragments.chat_page_fragment;
+import com.example.tribu_inital.fragments.home_fragment;
+import com.example.tribu_inital.start.Loading_page;
+import com.example.tribu_inital.start.Start_page;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -37,7 +48,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.Objects;
 import java.util.UUID;
 
-public class Add_Activity_page_fragment extends DialogFragment implements View.OnClickListener {
+public class Add_Activity_page_fragment extends Fragment implements View.OnClickListener {
 
     Button dissmisButton, postButton;
     TextInputLayout titleInput, descripionInput;
@@ -62,6 +73,10 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
     byte[] bytes;
 
 
+    RelativeLayout layout;
+
+    ProgressBar progressBar;
+
     public Add_Activity_page_fragment() {
         // Required empty public constructor
     }
@@ -81,7 +96,6 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
 
                     if((Bitmap) data.getExtras().get("image") != null) {
 
-                        //Todo: create func that look like thiscontinueCreatingUser("gallery");
 
                         Bitmap bitmap = (Bitmap) data.getExtras().get("image");
 
@@ -90,7 +104,6 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
                         bytes = baos.toByteArray();
                     }else {
                         uri = String.valueOf(data.getData());
-                        //Todo: create func that look like thiscontinueCreatingUser("gallery");
                     }
 
                 });
@@ -111,6 +124,16 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
         titleInput = view.findViewById(R.id.titleInput);
         ChangeImage = view.findViewById(R.id.changeImage);
 
+        layout = view.findViewById(R.id.Loading);
+
+        progressBar = new ProgressBar(getContext(), null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        layout.addView(progressBar, params);
+
+        progressBar.setVisibility(View.GONE);
+
+
         //default uri
         uri = "android.resource://com.example.tribu_inital/"+R.mipmap.ic_launcher;
 
@@ -118,7 +141,13 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
 
 
 
-        dissmisButton.setOnClickListener(view1 -> dismiss());
+        dissmisButton.setOnClickListener(view1 -> {
+            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.replace
+                    (R.id.fragment_container, new home_fragment()).commit();
+        });
 
         postButton.setOnClickListener(this);
 
@@ -137,17 +166,7 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
         return view;
     }
 
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // The only reason you might override this method when using onCreateView() is
-        // to modify any dialog characteristics. For example, the dialog includes a
-        // title by default, but your custom layout might not need it. So here you can
-        // remove the dialog title, but you must call the superclass to get the Dialog.
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        return dialog;
-    }
+
 
     @Override
     public void onClick(View view) {
@@ -179,8 +198,9 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
 
 
             Post post = new Post(title.getText().toString(), description.getText().toString(), picName, user.getUid());
-
+            DatabaseReference ref2 = ref;
             ref = database.getReference("Posts");
+
 
             String uuid = String.valueOf(UUID.randomUUID());
 
@@ -188,6 +208,10 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
 
 
             storeRef = FirebaseStorage.getInstance().getReference("Images/Posts/"+picName);
+
+            ref2 = database.getReference("Groups");
+
+            ref2.child(String.valueOf(UUID.randomUUID())).setValue(post.getTitle());
 
             if(bytes == null) {
                 storeRef.putFile(Uri.parse(uri))
@@ -197,8 +221,9 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
                             Log.d("addActivityFragment", "Error" + e.getMessage());
 
                         });
-                dismiss();
-                return;
+
+                loadThread.start();
+
             }
 
             UploadTask uploadTask = (UploadTask) storeRef.putBytes(bytes).addOnSuccessListener(taskSnapshot -> {
@@ -207,9 +232,9 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
                 Log.d("addActivityFragment","failed to post"+e.getMessage());
             });
 
-            loadThread.start();
 
-            dismiss();
+
+            loadThread.start();
 
 
         } catch (Exception e) {
@@ -217,26 +242,46 @@ public class Add_Activity_page_fragment extends DialogFragment implements View.O
         }
 
 
-
     }
+
+
     Thread loadThread = new Thread() {
         @Override
         public void run() {
             super.run();
 
             synchronized (this) {
+                try {
+                    requireActivity().runOnUiThread(() -> {
+                        progressBar.setVisibility(View.VISIBLE);
+                    });
 
+                    sleep(2000);
 
-                // waiting for 3 seconds
-                try{
+                    requireActivity().runOnUiThread(() -> {
+                        progressBar.setVisibility(View.GONE);
+                    });
 
-                    wait(3000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
                 }
-            }
-        }
 
+                catch (Exception e){
+                    Log.e("home_fragment","error in thread "+e.getMessage());
+                }
+
+                finally {
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.replace
+                            (R.id.fragment_container, new home_fragment()).commit();
+                }
+
+
+            }
+
+        }
     };
+
+
 
 }

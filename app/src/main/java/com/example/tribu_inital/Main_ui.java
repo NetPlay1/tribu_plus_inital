@@ -11,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tribu_inital.fragments.Tool_bar;
+import com.example.tribu_inital.fragments.home_fragment;
 import com.example.tribu_inital.fragments.search_bar_fragment;
 import com.example.tribu_inital.start.Start_page;
 import com.google.android.gms.auth.api.signin.internal.Storage;
@@ -57,7 +58,11 @@ public class Main_ui extends AppCompatActivity implements View.OnClickListener {
 
             fragmentTransaction.replace(R.id.content2, new search_bar_fragment());
             fragmentTransaction.replace(R.id.content, new Tool_bar());
-            fragmentTransaction.commit();
+
+
+            fragmentTransaction.replace
+                    (R.id.fragment_container, new home_fragment()).commit();
+
 
             if(savedInstanceState == null){
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
