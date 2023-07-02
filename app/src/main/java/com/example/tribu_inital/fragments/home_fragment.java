@@ -15,8 +15,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.example.tribu_inital.Activity_item;
 import com.example.tribu_inital.Activity_list_adapter;
@@ -36,7 +34,6 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 public class home_fragment extends Fragment {
@@ -103,7 +100,7 @@ public class home_fragment extends Fragment {
 
 
 
-        addButton.setOnClickListener(view1 -> showDialog());
+        addButton.setOnClickListener(view1 -> addNewPost());
 
 
         database = FirebaseDatabase.getInstance();
@@ -121,7 +118,6 @@ public class home_fragment extends Fragment {
                 //clearing the whole list
                 posts.clear();
 
-                Log.d("homefragment", "" + 1);
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
                     Post post = dataSnapshot.getValue(Post.class);
@@ -135,11 +131,11 @@ public class home_fragment extends Fragment {
                         bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                         Log.d("homefragment", "found image");
 
-                        posts.add(new Activity_item(post.getTitle(), bmp));
+                        posts.add(new Activity_item(post.getTitle(), bmp, dataSnapshot.getKey(),post.getConnectedgroup()));
 
 
 
-
+                        // reloading the whole list (i know it's not efficient)
                         adapter.notifyDataSetChanged();
 
 
@@ -167,7 +163,7 @@ public class home_fragment extends Fragment {
         return view;
     }
 
-    public void showDialog() {
+    public void addNewPost() {
 
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

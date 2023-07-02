@@ -40,10 +40,13 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?attr/textAppearanceTitleLarge"
                     android:textAlignment="center"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     android:text="activity1"/>
 
             </LinearLayout>
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/joinActivity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:textSize="20sp"

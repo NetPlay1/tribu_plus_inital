@@ -45,6 +45,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -194,10 +196,10 @@ public class Add_Activity_page_fragment extends Fragment implements View.OnClick
                 throw new Exception("Description string is empty!");
             }
 
-            //TODO: uploading the posts to fire base
 
-
-            Post post = new Post(title.getText().toString(), description.getText().toString(), picName, user.getUid());
+            //TODO: finish adding the categories
+            String uuid2 = String.valueOf(UUID.randomUUID());
+            Post post = new Post(title.getText().toString(), description.getText().toString(), picName, user.getUid(),"default",uuid2);
             DatabaseReference ref2 = ref;
             ref = database.getReference("Posts");
 
@@ -209,9 +211,15 @@ public class Add_Activity_page_fragment extends Fragment implements View.OnClick
 
             storeRef = FirebaseStorage.getInstance().getReference("Images/Posts/"+picName);
 
+            ArrayList<String> UsersList = new ArrayList<>();
+
+            UsersList.add(user.getUid());
+            Group group = new Group(title.getText().toString(), description.getText().toString(), picName, uuid, UsersList, user.getUid(),uuid2);
+
             ref2 = database.getReference("Groups");
 
-            ref2.child(String.valueOf(UUID.randomUUID())).setValue(post.getTitle());
+
+            ref2.child(uuid2).setValue(group);
 
             if(bytes == null) {
                 storeRef.putFile(Uri.parse(uri))
@@ -244,6 +252,8 @@ public class Add_Activity_page_fragment extends Fragment implements View.OnClick
 
     }
 
+
+    //TODO: fix gallery image
 
     Thread loadThread = new Thread() {
         @Override

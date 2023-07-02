@@ -13,14 +13,21 @@ public class Post implements Serializable{
     private String ownerUid;
 
 
+    private String category;
+
+    private String connectedgroup;
 
 
-    public Post(String title, String description, String uri , String ownerUid) {
+
+
+    public Post(String title, String description, String uri , String ownerUid,String Category,String connectedgroup) {
 
         this.title = title;
         this.description = description;
         this.uri = uri;
         this.ownerUid = ownerUid;
+        this.category = category;
+        this.connectedgroup = connectedgroup;
 
     }
 
@@ -59,5 +66,21 @@ public class Post implements Serializable{
 
     public void setOwnerUid(String ownerUid) {
         this.ownerUid = ownerUid;
+    }
+
+    public String getConnectedgroup() {
+        return connectedgroup;
+    }
+
+    public void setConnectedgroup(String connectedgroup) {
+        this.connectedgroup = connectedgroup;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 }
